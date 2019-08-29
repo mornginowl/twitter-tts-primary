@@ -2,13 +2,17 @@
 
 <p>
   <strong>Message:</strong>
-  <%= @tweet.message %>
+  <%= @tweet.message.html_safe %>
 </p>
 
 <p>
   <strong>User:</strong>
-  <%= @tweet.user_id %>
+  <%= @tweet.user.username %>
 </p>
 
 <%= link_to 'Edit', edit_tweet_path(@tweet) %> |
 <%= link_to 'Back', tweets_path %>
+<p>
+	<strong>User:</strong>
+	<%= link_to @tweet.user.username, show_user_path(id: @tweet.user_id) %>
+</p>
