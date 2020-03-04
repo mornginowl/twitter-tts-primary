@@ -1,10 +1,14 @@
 class EpicenterController < ApplicationController
   def feed
+    
     @following_tweets = []
 
     Tweet.all.each do |tweet|
-      if current_user.following.include?(tweet.user_id)  || current_user.id == tweet.user_id
-        @following_tweets.push(tweet)
+      unless current_user.blank?
+        if current_user.following.include?(tweet.user_id)  || current_user.id == tweet.user_id
+          @following_tweets.push(tweet)
+        end
+      
       end
     end
 end
@@ -30,5 +34,34 @@ def unfollow
   current_user.save
   redirect_to show_user_path(id: params[:id])   
 end
+  def all_users
+    @users = User.all
+    # or:
+    # User.order(:username)
+    # User.order(:name)
+    # or whatever order you'd
+    # like to put them in
+  end
+  # epicenter_controller.rb
+  def following
+    @user = User.find(params[:id])
+    @users = []
 
+    User.all.each do |user|
+      if @user.following.include?(user.id)
+        @users.push(user)
+      end
+    end
+  end
+
+  def followers
+    @user =  User.find(params[:id])
+    @users = []
+
+    User.all.each do |user|
+      if user.following.include?(@user.id)
+        @users.push(user)
+      end
+    end
+  end
 end
